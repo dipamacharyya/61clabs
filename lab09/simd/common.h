@@ -111,8 +111,6 @@ long long int sum_simd_unrolled(unsigned int vals[NUM_ELEMS]) {
 			zeroes = _mm_add_epi32(result2, zeroes);
 			zeroes = _mm_add_epi32(result3, zeroes);
 			zeroes = _mm_add_epi32(result4, zeroes);
-
-		
 		}
 		int *bob = malloc(sizeof(int)*4);
 		_mm_storeu_si128(bob, zeroes);
