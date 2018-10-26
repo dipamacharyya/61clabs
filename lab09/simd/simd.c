@@ -16,14 +16,14 @@ int main(int argc, char* argv[]) {
 	printf("Starting randomized sum.\n");
 	printf("Sum: %lld\n", reference = sum(vals));
 
-	printf("Starting randomized unrolled sum.\n");
-	printf("Sum: %lld\n", sum_unrolled(vals));
+	// printf("Starting randomized unrolled sum.\n");
+	// printf("Sum: %lld\n", sum_unrolled(vals));
 
-	printf("Starting randomized SIMD sum.\n");
-	printf("Sum: %lld\n", simd = sum_simd(vals));
-	if (simd != reference) {
-		printf("OH NO! SIMD sum %lld doesn't match reference sum %lld!\n", simd, reference);
-	}
+	// printf("Starting randomized SIMD sum.\n");
+	// printf("Sum: %lld\n", simd = sum_simd(vals));
+	// if (simd != reference) {
+	// 	printf("OH NO! SIMD sum %lld doesn't match reference sum %lld!\n", simd, reference);
+	// }
 
 	printf("Starting randomized SIMD unrolled sum.\n");
 	printf("Sum: %lld\n", simdu = sum_simd_unrolled(vals));

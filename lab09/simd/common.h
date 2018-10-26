@@ -55,9 +55,28 @@ long long int sum_simd(unsigned int vals[NUM_ELEMS]) {
 											// DO NOT DO NOT DO NOT DO NOT WRITE ANYTHING ABOVE THIS LINE.
 	for(unsigned int w = 0; w < OUTER_ITERATIONS; w++) {
 		/* YOUR CODE GOES HERE */
+		__m128i zeroes = _mm_setzero_si128();
 
-		/* You'll need a tail case. */
+		for (unsigned i = 0; i < NUM_ELEMS/4*4; i+=4) {
+			__m128i fours = _mm_loadu_si128(&vals[i]);
+			__m128i comp = _mm_cmpgt_epi32(fours, _127);
+			__m128i resultc = _mm_and_si128(fours,comp);
+			zeroes = _mm_add_epi32(resultc, zeroes);
+		
+		}
+		int *bob = malloc(sizeof(int)*4);
+		_mm_storeu_si128(bob, zeroes);
+		result += bob[0];
+		result += bob[1];
+		result += bob[2];
+		result += bob[3];
+		free(bob); 
 
+		for(unsigned int i = NUM_ELEMS / 4 * 4; i < NUM_ELEMS; i++) {
+			if (vals[i] >= 128) {
+				result += vals[i];
+			}
+		}
 	}
 	clock_t end = clock();
 	printf("Time taken: %Lf s\n", (long double)(end - start) / CLOCKS_PER_SEC);
@@ -71,7 +90,44 @@ long long int sum_simd_unrolled(unsigned int vals[NUM_ELEMS]) {
 	for(unsigned int w = 0; w < OUTER_ITERATIONS; w++) {
 		/* COPY AND PASTE YOUR sum_simd() HERE */
 		/* MODIFY IT BY UNROLLING IT */
+	for(unsigned int w = 0; w < OUTER_ITERATIONS; w++) {
+		/* YOUR CODE GOES HERE */
+		__m128i zeroes = _mm_setzero_si128();
 
+		for (unsigned i = 0; i < NUM_ELEMS/16*16; i+=16) {
+			__m128i fours1 = _mm_loadu_si128(&vals[i]);
+			__m128i fours2 = _mm_loadu_si128(&vals[i+4]);
+			__m128i fours3 = _mm_loadu_si128(&vals[i+8]);
+			__m128i fours4 = _mm_loadu_si128(&vals[i+12]);
+			__m128i comp1 = _mm_cmpgt_epi32(fours1, _127);
+			__m128i comp2 = _mm_cmpgt_epi32(fours2, _127);
+			__m128i comp3 = _mm_cmpgt_epi32(fours3, _127);
+			__m128i comp4 = _mm_cmpgt_epi32(fours4, _127);
+			__m128i result1 = _mm_and_si128(fours1,comp1);
+			__m128i result2 = _mm_and_si128(fours2,comp2);
+			__m128i result3 = _mm_and_si128(fours3,comp3);
+			__m128i result4 = _mm_and_si128(fours4,comp4);
+			zeroes = _mm_add_epi32(result1, zeroes);
+			zeroes = _mm_add_epi32(result2, zeroes);
+			zeroes = _mm_add_epi32(result3, zeroes);
+			zeroes = _mm_add_epi32(result4, zeroes);
+
+		
+		}
+		int *bob = malloc(sizeof(int)*4);
+		_mm_storeu_si128(bob, zeroes);
+		result += bob[0];
+		result += bob[1];
+		result += bob[2];
+		result += bob[3];
+		free(bob); 
+
+		for(unsigned int i = NUM_ELEMS / 16 * 16; i < NUM_ELEMS; i++) {
+			if (vals[i] >= 128) {
+				result += vals[i];
+			}
+		}
+	}
 		/* You'll need 1 or maybe 2 tail cases here. */
 
 	}
